@@ -157,5 +157,17 @@ fi
 echo "${blue}You can now start your distribution with the following command:${reset}"
 echo "${cyan}proot-distro login $distro${reset}"
 
+if [ -z "$(command -v iqos)" ]; then
+    echo "${yellow}Installing iqos...${reset}"
+    curl -fsSL https://raw.githubusercontent.com/IQuarks/iqos/main/iqos.sh -o $PREFIX/bin/iqos
+    chmod +x $PREFIX/bin/iqos
+    if [ $? -ne 0 ]; then
+        echo "${red}Failed to install iqos. Please check your permissions.${reset}"
+        exit 1
+    fi
+else
+    echo "${green}iqos is already installed.${reset}"
+fi
+
 sleep 2
 exit 0
