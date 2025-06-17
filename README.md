@@ -6,8 +6,8 @@ This project provides scripts to automate the setup of Termux and the installati
 
 `init.bash` is used to set up Termux and initialize either a CLI or GUI Linux distribution environment.
 
-```sh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/IQuarks/xsetup/main/init.bash)"
+```bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/IQuarks/xsetup/main/init.bash)"
 ```
 
 ## CLI Initialization
