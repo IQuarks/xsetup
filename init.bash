@@ -88,11 +88,11 @@ if [ ! -d "$INSTALL_DIR" ]; then
     exit 1
 fi
 
-read -p "Choose a distribution to install [ debian, ubuntu, fedora, alpine ] (press enter for debian): " distro
+read -p "Choose a distribution to install [ debian, ubuntu, fedora, alpine, archlinux, void ] (press enter for debian): " distro
 distro=${distro:-debian}
 
-if [ "$distro" != "debian" ] && [ "$distro" != "ubuntu" ] && [ "$distro" != "fedora" ] && [ "$distro" != "alpine" ]; then
-    echo "${red}Invalid distribution. Please choose 'debian', 'ubuntu', 'fedora', or 'alpine'.${reset}"
+if [ "$distro" != "debian" ] && [ "$distro" != "ubuntu" ] && [ "$distro" != "fedora" ] && [ "$distro" != "alpine" ] && [ "$distro" != "archlinux" ] && [ "$distro" != "void" ]; then
+    echo "${red}Invalid distribution. Please choose 'debian', 'ubuntu', 'fedora', 'alpine', 'archlinux', or 'void'.${reset}"
     exit 1
 fi
 
