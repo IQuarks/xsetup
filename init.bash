@@ -5,21 +5,19 @@ if [ -z "$(command -v pkg)" ]; then
   exit 1
 fi
 
-echo "Updating package repository..."
-pkg update -f
-if [ $? -ne 0 ]; then
-  echo "Failed to update package repository. Please check your network connection or package manager."
-  exit 1
-fi
+echo -e "Updating package repository..."
+pkg update -f | while IFS= read -r line; do
+  echo -ne "${line}\r"
+  sleep 0.05
+done
 
-echo "Upgrading installed packages..."
-pkg upgrade -y
-if [ $? -ne 0 ]; then
-  echo "Failed to upgrade packages. Please check your package manager."
-  exit 1
-fi
+echo -e "\nUpgrading installed packages..."
+pkg upgrade -y | while IFS= read -r line; do
+  echo -ne "${line}\r"
+  sleep 0.05
+done
 
-echo "Installing ncurses-utils..."
+echo -e "\nInstalling ncurses-utils..."
 pkg install -y ncurses-utils > /dev/null 2>&1
 if [ $? -ne 0 ]; then
   echo "Failed to install ncurses-utils. Please check your package manager."
@@ -58,14 +56,13 @@ if [ -z "$(command -v termux-setup-storage)" ]; then
     exit 1
 fi
 
-echo "${blue}Setting up storage permissions...${reset}"
-termux-setup-storage
-if [ $? -ne 0 ]; then
-  echo "${red}Failed to set up storage permissions. Please check your Termux installation.${reset}"
-  exit 1
-fi
+echo -e "${blue}Setting up storage permissions...${reset}"
+termux-setup-storage | while IFS= read -r line; do
+    echo -ne "${line}\r"
+    sleep 0.05
+done
 
-echo "${yellow}Installing proot-distro...${reset}"
+echo "\n${yellow}Installing proot-distro...${reset}"
 pkg install -y proot-distro > /dev/null 2>&1
 if [ $? -ne 0 ]; then
   echo "${red}Failed to install proot-distro. Please check your package manager.${reset}"
