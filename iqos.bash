@@ -9,8 +9,8 @@ cyan=$(tput setaf 6)
 white=$(tput setaf 7)
 reset=$(tput sgr0)
 
-if [ $(id -u) -ne 0 ]; then
-    echo "${red}This script should be run as root. Please run it with sudo.${reset}"
+if [ $(id -u) -eq 0 ]; then
+    echo "${red}This script should not be run as root. Please run it as a regular user.${reset}"
     exit 1
 fi
 
