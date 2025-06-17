@@ -159,7 +159,7 @@ echo "${cyan}proot-distro login $distro${reset}"
 
 if [ -z "$(command -v iqos)" ]; then
     echo "${yellow}Installing iqos...${reset}"
-    curl -fsSL https://raw.githubusercontent.com/IQuarks/iqos/main/iqos.bash -o $PREFIX/bin/iqos
+    curl -fsSL https://raw.githubusercontent.com/IQuarks/xsetup/main/iqos.bash -o $PREFIX/bin/iqos
     chmod +x $PREFIX/bin/iqos
     if [ $? -ne 0 ]; then
         echo "${red}Failed to install iqos. Please check your permissions.${reset}"
