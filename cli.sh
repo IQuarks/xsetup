@@ -107,7 +107,7 @@ if [ "$create_user" = "y" ]; then
         fi
     fi
 
-    echo $new_user > $HOME/.xsetup-cache
+    echo "new_user=$new_user" > $HOME/.xsetup-cache
     
     if command -v apt >/dev/null 2>&1; then
         su -- $new_user -c "apt install -y neovim cmake git"
