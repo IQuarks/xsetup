@@ -14,7 +14,7 @@ if [ $(id -u) -ne 0 ]; then
     exit 1
 fi
 
-echo "${green}Updating and upgrading packages...${reset}"
+echo "${green}Updating and upgrading packages...${reset}\n"
 if command -v apt >/dev/null 2>&1; then
     apt update && apt upgrade -y
     if [ $? -ne 0 ]; then
@@ -29,6 +29,7 @@ if command -v apt >/dev/null 2>&1; then
         exit 1
     fi
 elif command -v apk >/dev/null 2>&1; then
+    echo "hello"
     apk update && apk upgrade -y
     if [ $? -ne 0 ]; then
         echo "${red}Failed to upgrade packages. Please check your package manager.${reset}"
