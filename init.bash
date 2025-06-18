@@ -51,12 +51,9 @@ fi
 msg -n "Updating package repository..."
 pkg update -f > /dev/null 2>&1
 
-msg -n "Upgrading installed packages..."
-pkg upgrade -y | while IFS= read -r line; do
-  msg -n "${line}"
-  sleep 0.05
-done
-msg "Upgrade complete!"
+msg "Upgrading installed packages...\n"
+pkg upgrade -y
+msg "\nUpgrade complete!"
 
 msg -n "Installing ncurses-utils..."
 pkg install -y ncurses-utils > /dev/null 2>&1
@@ -99,12 +96,12 @@ if [ -z "$(command -v termux-setup-storage)" ]; then
     exit 1
 fi
 
-msg -n "${blue}Setting up storage permissions...${reset}"
+msg "${blue}Setting up storage permissions...${reset}\n"
 termux-setup-storage
 if [ $? -ne 0 ]; then
-  msg "${red}Failed to set up storage permissions. Please check your Termux installation.${reset}"
+  msg "\n${red}Failed to set up storage permissions. Please check your Termux installation.${reset}"
 else
-  msg "${green}Storage permissions set up successfully!${reset}"
+  msg "\n${green}Storage permissions set up successfully!${reset}"
 fi
 
 msg -n "${yellow}Installing proot-distro...${reset}"
