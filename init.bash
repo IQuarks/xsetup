@@ -83,14 +83,6 @@ if [ $(id -u) -eq 0 ]; then
     exit 1
 fi
 
-read -p "Choose an installation type [ cli, gui ] (press enter for cli): " install_type
-install_type=${install_type:-cli}
-
-if [ "$install_type" != "cli" ] && [ "$install_type" != "gui" ]; then
-    echo "${red}Invalid installation type. Please choose 'cli' or 'gui'.${reset}"
-    exit 1
-fi
-
 if [ -z "$(command -v termux-setup-storage)" ]; then
     echo "${red}termux-setup-storage command not found. Please install Termux and try again.${reset}"
     exit 1
@@ -111,6 +103,14 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 msg "${green}proot-distro installed successfully!${reset}"
+
+read -p "Choose an installation type [ cli, gui ] (press enter for cli): " install_type
+install_type=${install_type:-cli}
+
+if [ "$install_type" != "cli" ] && [ "$install_type" != "gui" ]; then
+    echo "${red}Invalid installation type. Please choose 'cli' or 'gui'.${reset}"
+    exit 1
+fi
 
 if [ "$install_type" == "gui" ]; then
     msg -n "${green}Installing GUI dependencies...${reset}"
