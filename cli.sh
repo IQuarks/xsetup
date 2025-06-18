@@ -189,7 +189,7 @@ if [ "$create_user" = "y" ]; then
             su -- $new_user -c "sudo apt install -y neovim cmake git"
             ;;
         alpine)
-            su -- $new_user -c "sudo apk add neovim cmake git"
+            su -- $new_user -c "apk add neovim cmake git"
             ;;
         fedora|rhel|centos)
             su -- $new_user -c "sudo dnf install -y neovim cmake git"
