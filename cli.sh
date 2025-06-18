@@ -74,7 +74,6 @@ if command -v apt >/dev/null 2>&1; then
         exit 1
     fi
 elif command -v apk >/dev/null 2>&1; then
-    echo "hello"
     apk update && apk upgrade -y
     if [ $? -ne 0 ]; then
         echo "${red}Failed to upgrade packages. Please check your package manager.${reset}"
