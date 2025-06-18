@@ -120,6 +120,11 @@ if [[ -n "$user" ]]; then
     set -- "--user" "$user" "$@"
 fi
 
+if $gui && [[ -z "$user" ]]; then
+    echo "${red}Error: ${yellow}--gui${reset} requires a user to be specified with ${yellow}--user${reset}."
+    exit 1
+fi
+
 if $gui; then
     pulseaudio --start --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" --exit-idle-time=-1
     proot-distro login $distro --shared-tmp "$@" -- /bin/sh -c "termux-x11 :1 -xstartup \"dbus-launch --exit-with-session xfce4-session\""
