@@ -121,7 +121,7 @@ case "$distro" in
             exit 1
         fi
         ;;
-    arch)
+    archarm|archlinux32)
         pacman -Syu --noconfirm
         if [ $? -ne 0 ]; then
             echo "${red}Failed to upgrade packages. Please check your package manager.${reset}"
@@ -194,7 +194,7 @@ if [ "$create_user" = "y" ]; then
         fedora|rhel|centos)
             su -- $new_user -c "sudo dnf install -y neovim cmake git"
             ;;
-        arch)
+        archarm|archlinux32)
             su -- $new_user -c "sudo pacman -S --noconfirm neovim cmake git"
             ;;
         *)
