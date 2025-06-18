@@ -206,7 +206,7 @@ if [ $? -ne 0 ]; then
     echo "${red}Failed to install iqos. Please check your permissions.${reset}"
     exit 1
 fi
-msg "${green}iqos installed successfully!${reset}"
+msg "${green}iqos installed successfully!${reset}\n"
 
 iqos --help
 
