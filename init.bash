@@ -1,23 +1,64 @@
 #!/bn/bash
 
+msg() {
+    # Use a static variable to store previous message length
+    if [[ -z "${_msg_prev_len+x}" ]]; then
+        _msg_prev_len=0
+    fi
+
+    # Use a static variable to store the newline state
+    if [[ -z "${_msg_prev_newline+x}" ]]; then
+        _msg_prev_newline=true
+    fi
+
+    # Check if the previous message ended with a newline
+    if ! $_msg_prev_newline; then
+        # If the previous message did not end with a newline, we need to clear the line
+        for ((i=0; i<$_msg_prev_len; i++)); do
+            echo -ne " "
+        done
+
+        # Move the cursor back to the start of the line
+        echo -ne "\r"
+    fi
+
+    # Check if the first argument is -n, which means no newline at the end
+    if [[ "$1" == "-n" ]]; then
+        shift
+        _msg_prev_newline=false
+    else
+        _msg_prev_newline=true
+    fi
+
+    # default variables
+    local message="$@"
+    _msg_prev_len=${#message}
+
+    if $_msg_prev_newline; then
+        set -- "${message}\n"
+    else
+        set -- "${message}\r"
+    fi
+
+    echo -ne "$@"
+}
+
 if [ -z "$(command -v pkg)" ]; then
   echo "pkg command not found. Please install pkg first."
   exit 1
 fi
 
-echo -e "Updating package repository..."
-pkg update -f | while IFS= read -r line; do
-  echo -ne "${line}\r"
-  sleep 0.05
-done
+msg -n "Updating package repository..."
+pkg update -f > /dev/null 2>&1
 
-echo -e "\nUpgrading installed packages..."
+msg -n "Upgrading installed packages..."
 pkg upgrade -y | while IFS= read -r line; do
-  echo -ne "${line}\r"
+  msg -n "${line}"
   sleep 0.05
 done
+msg "Upgrade complete!"
 
-echo -e "\nInstalling ncurses-utils..."
+msg -n "Installing ncurses-utils..."
 pkg install -y ncurses-utils > /dev/null 2>&1
 if [ $? -ne 0 ]; then
   echo "Failed to install ncurses-utils. Please check your package manager."
@@ -32,6 +73,8 @@ pink=$(tput setaf 5)
 cyan=$(tput setaf 6)
 white=$(tput setaf 7)
 reset=$(tput sgr0)
+
+msg "${green}ncurses-utils installed successfully!${reset}"
 
 if [ -z "$TERM" ]; then
   echo "TERM environment variable is not set. Please set it to a valid terminal type."
@@ -56,27 +99,31 @@ if [ -z "$(command -v termux-setup-storage)" ]; then
     exit 1
 fi
 
-echo -e "${blue}Setting up storage permissions...${reset}"
-termux-setup-storage | while IFS= read -r line; do
-    echo -ne "${line}\r"
-    sleep 0.05
-done
+msg -n "${blue}Setting up storage permissions...${reset}"
+termux-setup-storage
+if [ $? -ne 0 ]; then
+  msg "${red}Failed to set up storage permissions. Please check your Termux installation.${reset}"
+else
+  msg "${green}Storage permissions set up successfully!${reset}"
+fi
 
-echo "\n${yellow}Installing proot-distro...${reset}"
+msg -n "${yellow}Installing proot-distro...${reset}"
 pkg install -y proot-distro > /dev/null 2>&1
 if [ $? -ne 0 ]; then
   echo "${red}Failed to install proot-distro. Please check your package manager.${reset}"
   exit 1
 fi
+msg "${green}proot-distro installed successfully!${reset}"
 
 if [ "$install_type" == "gui" ]; then
-    echo "${green}Installing GUI dependencies...${reset}"
+    msg -n "${green}Installing GUI dependencies...${reset}"
     pkg install -y x11-repo > /dev/null 2>&1
     pkg install -y xorg-server xorg-xrandr termux-x11-nightly pulseaudio > /dev/null 2>&1
     if [ $? -ne 0 ]; then
         echo "${red}Failed to install GUI dependencies. Please check your package manager.${reset}"
         exit 1
     fi
+    msg "${green}GUI dependencies installed successfully!${reset}"
 fi
 
 INSTALL_DIR=$PREFIX/var/lib/proot-distro/installed-rootfs
@@ -142,7 +189,7 @@ else
     fi
 fi
 
-echo "${green}$distro installation completed successfully!${reset}"
+msg "${green}$distro installation completed successfully!${reset}"
 
 echo "${yellow}Initializing $distro...${reset}"
 proot-distro login $distro --shared-tmp -- /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/IQuarks/xsetup/main/${install_type}.sh)"
@@ -155,13 +202,14 @@ echo "${blue}You can now start your distribution with the following command:${re
 echo "${cyan}proot-distro login $distro${reset}"
 
 if [ -z "$(command -v iqos)" ]; then
-    echo "${yellow}Installing iqos...${reset}"
-    curl -fsSL https://raw.githubusercontent.com/IQuarks/xsetup/main/iqos.bash -o $PREFIX/bin/iqos
+    msg -n "${yellow}Installing iqos...${reset}"
+    curl -fsSL https://raw.githubusercontent.com/IQuarks/xsetup/main/iqos.bash -o $PREFIX/bin/iqos > /dev/null 2>&1
     chmod +x $PREFIX/bin/iqos
     if [ $? -ne 0 ]; then
         echo "${red}Failed to install iqos. Please check your permissions.${reset}"
         exit 1
     fi
+    msg "${green}iqos installed successfully!${reset}"
 else
     echo "${green}iqos is already installed.${reset}"
 fi
