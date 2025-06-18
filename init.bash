@@ -191,10 +191,9 @@ fi
 msg "${green}$distro installation completed successfully!${reset}"
 
 echo "${yellow}Initializing $distro...${reset}"
-proot-distro login $distro --shared-tmp -- /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/IQuarks/xsetup/main/${install_type}.sh)"
+proot-distro login $distro --shared-tmp -- /bin/sh -c "$(curl -fsSL https://raw.githubusercontent.com/IQuarks/xsetup/main/$install_type.sh)"
 if [ $? -ne 0 ]; then
   echo "${red}Failed to initialize $distro. Please check your proot-distro installation.${reset}"
-  exit 1
 fi
 
 echo "${blue}You can now start your distribution with the following command:${reset}"
