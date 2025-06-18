@@ -101,7 +101,7 @@ if [ -f "$HOME/.xsetup-cache" ]; then
             exit 1
             ;;
     esac
-    msg "\n${green}XFCE4 desktop environment installed successfully!${reset}\n"
+    msg "\n${green}XFCE4 desktop environment installed successfully!${reset}"
 else
     msg "${red}To install XFCE4 desktop environment, you need to have a user account with sudo privileges. For security reasons, a user account is required to install desktop environments and graphical applications.${reset}"
     exit 1

@@ -184,6 +184,7 @@ if [ "$create_user" = "y" ]; then
 
     echo "new_user=$new_user" > $HOME/.xsetup-cache
 
+    msg "${blue}Installing neovim, cmake, and git for user $new_user...${reset}\n"
     case "$distro" in
         ubuntu|debian)
             su -- $new_user -c "sudo apt install -y neovim cmake git"
@@ -202,4 +203,5 @@ if [ "$create_user" = "y" ]; then
             exit 1
             ;;
     esac
+    msg "\n${green}Installation complete!${reset}"
 fi
