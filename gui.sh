@@ -82,6 +82,7 @@ if [ -f "$HOME/.xsetup-cache" ]; then
         exit 1
     fi
 
+    msg "${blue}Installing XFCE4 desktop environment...${reset}\n"
     case "$distro" in
         ubuntu|debian)
             su -- $new_user -c "sudo apt install -y dbus-x11 xwayland xfce4 xfce4-terminal pulseaudio" # xfce4-panel xfce4-session xfce4-settings xfwm4 lightdm lightdm-gtk-greeter"
@@ -100,6 +101,7 @@ if [ -f "$HOME/.xsetup-cache" ]; then
             exit 1
             ;;
     esac
+    msg "\n${green}XFCE4 desktop environment installed successfully!${reset}\n"
 else
     msg "${red}To install XFCE4 desktop environment, you need to have a user account with sudo privileges. For security reasons, a user account is required to install desktop environments and graphical applications.${reset}"
     exit 1
