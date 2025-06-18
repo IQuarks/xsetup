@@ -92,7 +92,7 @@ case "$distro" in
         fi
         ;;
     alpine)
-        apk update && apk upgrade -y
+        apk update && apk upgrade
         if [ $? -ne 0 ]; then
             echo "${red}Failed to upgrade packages. Please check your package manager.${reset}"
             exit 1
