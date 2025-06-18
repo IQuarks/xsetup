@@ -166,17 +166,23 @@ if [ "$create_user" = "y" ]; then
     fi
 
     echo "new_user=$new_user" > $HOME/.xsetup-cache
-    
-    if command -v apt >/dev/null 2>&1; then
-        su -- $new_user -c "sudo apt install -y neovim cmake git"
-    elif command -v apk >/dev/null 2>&1; then
-        su -- $new_user -c "sudo apk add neovim cmake git"
-    elif command -v dnf >/dev/null 2>&1; then
-        su -- $new_user -c "sudo dnf install -y neovim cmake git"
-    elif command -v pacman >/dev/null 2>&1; then
-        su -- $new_user -c "sudo pacman -S --noconfirm neovim cmake git"
-    else
-        echo "${red}No supported package manager found. Please install packages manually.${reset}"
-        exit 1
-    fi
+
+    case "$distro" in
+        ubuntu|debian)
+            su -- $new_user -c "sudo apt install -y neovim cmake git"
+            ;;
+        alpine)
+            su -- $new_user -c "sudo apk add neovim cmake git"
+            ;;
+        fedora|rhel|centos)
+            su -- $new_user -c "sudo dnf install -y neovim cmake git"
+            ;;
+        arch)
+            su -- $new_user -c "sudo pacman -S --noconfirm neovim cmake git"
+            ;;
+        *)
+            echo "${red}Unsupported distribution: $distro${reset}"
+            exit 1
+            ;;
+    esac
 fi
