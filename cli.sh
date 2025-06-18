@@ -58,6 +58,11 @@ if [ $(id -u) -ne 0 ]; then
     exit 1
 fi
 
+if command -v apk >/dev/null 2>&1; then
+    echo "${yellow}Detected Alpine Linux. This script is not fully compatible with Alpine. Please use the original script.${reset}"
+    exit 1
+fi
+
 echo "${green}Updating and upgrading packages...${reset}\n"
 if command -v apt >/dev/null 2>&1; then
     apt update && apt upgrade -y
