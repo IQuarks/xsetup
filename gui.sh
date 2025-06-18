@@ -88,13 +88,13 @@ if [ -f "$HOME/.xsetup-cache" ]; then
             su -- $new_user -c "sudo apt install -y dbus-x11 xwayland xfce4 xfce4-terminal pulseaudio" # xfce4-panel xfce4-session xfce4-settings xfwm4 lightdm lightdm-gtk-greeter"
             ;;
         alpine)
-            su -- $new_user -c "apk add dbus xorg-xwayland xfce4 xfce4-terminal pulseaudio"
+            su -- $new_user -c "apk add dbus-x11 xwayland xfce4 xfce4-terminal pulseaudio"
             ;;
         fedora|rhel|centos)
             su -- $new_user -c "sudo dnf install -y dbus-x11 xwayland xfce4 xfce4-terminal pulseaudio"
             ;;
         archarm|archlinux32)
-            su -- $new_user -c "sudo pacman -S --noconfirm dbus-x11 xwayland xfce4 xfce4-terminal pulseaudio"
+            su -- $new_user -c "sudo pacman -S --noconfirm dbus xorg-xwayland xfce4 xfce4-terminal pulseaudio"
             ;;
         *)
             echo "${red}Unsupported distribution: $distro${reset}"
