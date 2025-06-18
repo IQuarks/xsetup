@@ -162,7 +162,7 @@ if [ "$create_user" = "y" ]; then
             fedora|rhel|centos)
                 adduser $new_user --shell /bin/zsh
                 ;;
-            arch)
+            archarm|archlinux32)
                 useradd $new_user -m -s /bin/zsh
                 ;;
             *)
