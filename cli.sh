@@ -58,10 +58,22 @@ if [ $(id -u) -ne 0 ]; then
     exit 1
 fi
 
-if command -v apk >/dev/null 2>&1; then
-    echo "${yellow}Detected Alpine Linux. This script is not fully compatible with Alpine. Please use the original script.${reset}"
-    exit 1
+# Detect Linux distribution
+distro="unknown"
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    distro="$ID"
+elif [ -f /etc/lsb-release ]; then
+    . /etc/lsb-release
+    distro="$DISTRIB_ID"
+elif [ -f /etc/redhat-release ]; then
+    distro="rhel"
+elif [ -f /etc/arch-release ]; then
+    distro="arch"
 fi
+
+echo "${cyan}Detected distribution: $distro${reset}"
+exit 0
 
 echo "${green}Updating and upgrading packages...${reset}\n"
 if command -v apt >/dev/null 2>&1; then
