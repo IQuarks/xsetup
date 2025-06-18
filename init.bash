@@ -212,5 +212,7 @@ else
     echo "${green}iqos is already installed.${reset}"
 fi
 
+iqos --help
+
 sleep 2
 exit 0
