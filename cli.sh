@@ -73,67 +73,74 @@ elif [ -f /etc/arch-release ]; then
 fi
 
 echo "${cyan}Detected distribution: $distro${reset}"
-exit 0
 
-echo "${green}Updating and upgrading packages...${reset}\n"
-if command -v apt >/dev/null 2>&1; then
-    apt update && apt upgrade -y
-    if [ $? -ne 0 ]; then
-        echo "${red}Failed to upgrade packages. Please check your package manager.${reset}"
-        exit 1
-    fi
-    msg "\nUpgrade complete!"
+msg "${green}Updating and upgrading packages...${reset}\n"
+case "$distro" in
+    ubuntu|debian)
+        apt update && apt upgrade -y
+        if [ $? -ne 0 ]; then
+            echo "${red}Failed to upgrade packages. Please check your package manager.${reset}"
+            exit 1
+        fi
+        msg "\nUpgrade complete!"
 
-    msg -n "${green}Installing required packages...${reset}"
-    apt install -y zsh curl sudo > /dev/null 2>&1
-    if [ $? -ne 0 ]; then
-        echo "${red}Failed to install required packages. Please check your package manager.${reset}"
-        exit 1
-    fi
-elif command -v apk >/dev/null 2>&1; then
-    apk update && apk upgrade -y
-    if [ $? -ne 0 ]; then
-        echo "${red}Failed to upgrade packages. Please check your package manager.${reset}"
-        exit 1
-    fi
-    msg "\nUpgrade complete!"
+        msg -n "${green}Installing required packages...${reset}"
+        apt install -y zsh curl sudo > /dev/null 2>&1
+        if [ $? -ne 0 ]; then
+            echo "${red}Failed to install required packages. Please check your package manager.${reset}"
+            exit 1
+        fi
+        ;;
+    alpine)
+        apk update && apk upgrade -y
+        if [ $? -ne 0 ]; then
+            echo "${red}Failed to upgrade packages. Please check your package manager.${reset}"
+            exit 1
+        fi
+        msg "\nUpgrade complete!"
 
-    msg -n "${green}Installing required packages...${reset}"
-    apk add zsh curl sudo > /dev/null 2>&1
-    if [ $? -ne 0 ]; then
-        echo "${red}Failed to install required packages. Please check your package manager.${reset}"
-        exit 1
-    fi
-elif command -v dnf >/dev/null 2>&1; then
-    dnf upgrade -y
-    if [ $? -ne 0 ]; then
-        echo "${red}Failed to upgrade packages. Please check your package manager.${reset}"
-        exit 1
-    fi
+        msg -n "${green}Installing required packages...${reset}"
+        apk add zsh curl sudo > /dev/null 2>&1
+        if [ $? -ne 0 ]; then
+            echo "${red}Failed to install required packages. Please check your package manager.${reset}"
+            exit 1
+        fi
+        ;;
+    fedora|rhel|centos)
+        dnf update -y && dnf upgrade -y
+        if [ $? -ne 0 ]; then
+            echo "${red}Failed to upgrade packages. Please check your package manager.${reset}"
+            exit 1
+        fi
+        msg "\nUpgrade complete!"
 
-    echo "${green}Installing required packages...${reset}"
-    dnf install -y zsh curl sudo > /dev/null 2>&1
-    if [ $? -ne 0 ]; then
-        echo "${red}Failed to install required packages. Please check your package manager.${reset}"
-        exit 1
-    fi
-elif command -v pacman >/dev/null 2>&1; then
-    pacman -Syu --noconfirm
-    if [ $? -ne 0 ]; then
-        echo "${red}Failed to upgrade packages. Please check your package manager.${reset}"
-        exit 1
-    fi
+        msg -n "${green}Installing required packages...${reset}"
+        dnf install -y zsh curl sudo > /dev/null 2>&1
+        if [ $? -ne 0 ]; then
+            echo "${red}Failed to install required packages. Please check your package manager.${reset}"
+            exit 1
+        fi
+        ;;
+    arch)
+        pacman -Syu --noconfirm
+        if [ $? -ne 0 ]; then
+            echo "${red}Failed to upgrade packages. Please check your package manager.${reset}"
+            exit 1
+        fi
+        msg "\nUpgrade complete!"
 
-    echo "${green}Installing required packages...${reset}"
-    pacman -S --noconfirm zsh curl sudo > /dev/null 2>&1
-    if [ $? -ne 0 ]; then
-        echo "${red}Failed to install required packages. Please check your package manager.${reset}"
+        msg -n "${green}Installing required packages...${reset}"
+        pacman -S --noconfirm zsh curl sudo > /dev/null 2>&1
+        if [ $? -ne 0 ]; then
+            echo "${red}Failed to install required packages. Please check your package manager.${reset}"
+            exit 1
+        fi
+        ;;
+    *)
+        echo "${red}Unsupported distribution: $distro${reset}"
         exit 1
-    fi
-else
-    echo "${red}No supported package manager found. Please install updates manually.${reset}"
-    exit 1
-fi
+        ;;
+esac
 msg "${green}Required packages installed successfully!${reset}"
 
 read -p "Do you want a new user? (y/n) (default: n): " create_user
