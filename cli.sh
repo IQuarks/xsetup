@@ -149,7 +149,6 @@ if [ "$create_user" = "y" ]; then
     read -p "Enter the new username: " new_user
     if id "$new_user" >/dev/null 2>&1; then
         echo "${red}User $new_user already exists. Please choose a different username.${reset}"
-        exit 1
     else
         echo "${green}Creating user $new_user...${reset}"
         adduser $new_user -s /bin/zsh
