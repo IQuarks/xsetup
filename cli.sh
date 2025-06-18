@@ -151,7 +151,25 @@ if [ "$create_user" = "y" ]; then
         echo "${red}User $new_user already exists. Please choose a different username.${reset}"
     else
         echo "${green}Creating user $new_user...${reset}"
-        adduser $new_user -s /bin/zsh
+
+        case "$distro" in
+            ubuntu|debian)
+                adduser $new_user --shell /bin/zsh
+                ;;
+            alpine)
+                adduser $new_user -s /bin/zsh
+                ;;
+            fedora|rhel|centos)
+                adduser $new_user --shell /bin/zsh
+                ;;
+            arch)
+                useradd $new_user -m -s /bin/zsh
+                ;;
+            *)
+                echo "${red}Unsupported distribution: $distro${reset}"
+                exit 1
+                ;;
+        esac
         if [ $? -ne 0 ]; then
             echo "${red}Failed to create user $new_user. Please check your input.${reset}"
             exit 1
