@@ -138,6 +138,8 @@ if [ "$distro" != "debian" ] && [ "$distro" != "ubuntu" ] && [ "$distro" != "fed
 fi
 
 if [ ! -d $INSTALL_DIR/$distro ];then
+    msg -n "${yellow}Installing $distro...${reset}"
+
     proot-distro install $distro > /dev/null 2>&1
     if [ $? -ne 0 ]; then
         echo "${red}Failed to install $distro. Please check your proot-distro installation.${reset}"
@@ -162,7 +164,7 @@ else
         fi
 
         if [ "$backup" == "y" ]; then
-            echo "${blue}Backing up $distro...${reset}"
+            msg -n "${blue}Backing up $distro...${reset}"
             #  proot-distro backup $distro --output-file $HOME/${distro}_backup_$(date +%Y%m%d_%H%M%S).xbackup > /dev/null 2>&1
             tar -czf $HOME/${distro}_backup_$(date +%Y%m%d_%H%M%S).tar.gz -C $INSTALL_DIR $distro > /dev/null 2>&1
             if [ $? -ne 0 ]; then
@@ -172,7 +174,7 @@ else
             echo "${green}$distro backup completed successfully!${reset}"
         fi
 
-        echo "${yellow}Reinstalling $distro...${reset}"
+        msg -n "${yellow}Reinstalling $distro...${reset}"
         proot-distro remove $distro > /dev/null 2>&1
         if [ $? -ne 0 ]; then
             echo "${red}Failed to remove $distro. Please check your proot-distro installation.${reset}"
