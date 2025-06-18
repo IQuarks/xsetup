@@ -74,8 +74,8 @@ fi
 
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/IQuarks/xsetup/main/cli.sh)"
 
-if [[ -f "$HOME/.xsetup-cache" ]]; then
-    source $HOME/.xsetup-cache
+if [ -f "$HOME/.xsetup-cache" ]; then
+    . $HOME/.xsetup-cache
 
     if [ -z "${new_user+x}" ] || [ -z "$new_user" ]; then
         echo "${red}No user account found. Please create a user account first.${reset}"
